@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from Draw import draw_candlestick_chart
 from Case_1 import Hammer
+from Trend import DownTrend, UpTrend
 
 #Request đến URL này (của Cafef) để có thể lấy API của các mã cổ phiếu
 URL = "https://cafef.vn/du-lieu/Ajax/PageNew/DataHistory/PriceHistory.ashx?Symbol=" 
@@ -66,32 +67,21 @@ if response.status_code == 200:
                 #Thêm những dữ liệu cần cho vào cây nến (Candlestick) 
                 Candle = Candlestick(float(OpenPrice), float(ClosePrice), float(HighPrice), float(LowPrice), date_obj)
                 Candle.date = date_obj  # Gán ngày cho đối tượng để dùng khi vẽ biểu đồ
-                Candlestick_Map[i] = Candle #Gán cây nến với số thứ tự 
-
-            #Xác nhận xu hướng giảm của thị trường
-            def DownTrend(Candles_Map, index, window = 3, allow_break = 1): 
-                if(index <= window): return False 
-
-                breaks = 0
-                for i in range(index-window+1, index+1): 
-                    prev_candles = Candles_Map[i-1] 
-                    curr_candles = Candles_Map[i] 
-                    if(prev_candles.get_close_price() <= curr_candles.get_close_price()): 
-                         breaks += 1
-                         if (breaks > allow_break): return False
-                return True  
+                Candlestick_Map[i] = Candle #Gán cây nến với số thứ tự  
 
             #In danh sách các nến 
             print("\n----Danh Sách Các Nến----")
             for key, value in Candlestick_Map.items(): 
                 print(f"Nến số {key}: {value}") 
 
-            print("\n----Phân tích mô hình sau xu hướng giảm----")
             for i in range(4, len(Candlestick_Map) + 1):  # Bắt đầu từ nến thứ 4 vì cần đủ 3 cây trước để xét xu hướng
                 if DownTrend(Candlestick_Map, i - 1):  # xu hướng giảm kết thúc tại i-1
                     hammer_candle = Candlestick_Map[i]
                     if Hammer(hammer_candle):
                         print(f"Nến số {i} là NẾN BÚA sau xu hướng giảm. Khả năng đảo chiều tăng!")
+
+                if UpTrend(Candlestick_Map, i - 1):
+                    print(f"Nến số {i} nằm sau xu hướng tăng.")
 
             #Mô phỏng lại biểu đồ của các cây nến
             draw_candlestick_chart(Candlestick_Map, symbol=Symbol)
