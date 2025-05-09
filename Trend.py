@@ -1,3 +1,4 @@
+#Xu hướng tăng liên tục
 def DownTrend(Candles_Map, index, window=3, allow_break=1): 
     if index <= window: 
         return False
@@ -12,7 +13,7 @@ def DownTrend(Candles_Map, index, window=3, allow_break=1):
                 return False
     return True  
 
-
+#Xu hướng giảm liên tục
 def UpTrend(Candles_Map, index, window=3, allow_break=1): 
     if index <= window: 
         return False
