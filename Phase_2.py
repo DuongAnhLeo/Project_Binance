@@ -2,7 +2,8 @@ import requests
 import json
 from datetime import datetime
 from Draw import draw_candlestick_chart
-from Case_1 import Hammer
+from Case_1 import Hammer, PiercingLine
+from Case_2 import HangingMan, DarkCloudCover
 from Trend import DownTrend, UpTrend
 
 #Request đến URL này (của Cafef) để có thể lấy API của các mã cổ phiếu
@@ -75,16 +76,30 @@ if response.status_code == 200:
                 print(f"Nến số {key}: {value}") 
 
             for i in range(4, len(Candlestick_Map) + 1):  # Bắt đầu từ nến thứ 4 vì cần đủ 3 cây trước để xét xu hướng
+                curr_candles = Candlestick_Map[i] 
+                prev_candles = Candlestick_Map[i-1]
                 if DownTrend(Candlestick_Map, i - 1):  # xu hướng giảm kết thúc tại i-1
+                    #Nến búa
                     hammer_candle = Candlestick_Map[i]
                     if Hammer(hammer_candle):
                         print(f"Nến số {i} là NẾN BÚA sau xu hướng giảm. Khả năng đảo chiều tăng!")
+                    
+                    #Mẫu hình xuyên thấu 
+                    if PiercingLine(prev_candles, curr_candles):
+                        print(f"Nến số {i-1} và nến số {i} tạo thành mẫu hình XUYÊN THẤU sau xu hướng giảm. Khả năng đảo chiều tăng!")
 
                 if UpTrend(Candlestick_Map, i - 1):
-                    print(f"Nến số {i} nằm sau xu hướng tăng.")
+                    #Nến người treo cổ
+                    hanging_man_candle = Candlestick_Map[i] 
+                    if (HangingMan(hanging_man_candle)):
+                        print(f"Nến số {i} là NẾN NGƯỜI TREO CỔ sau xu hướng tăng. Khả năng đảo chiều giảm!")
 
-            #Mô phỏng lại biểu đồ của các cây nến
-            draw_candlestick_chart(Candlestick_Map, symbol=Symbol)
+                    #Mẫu hình mây đen bao phủ
+                    if DarkCloudCover(prev_candles, curr_candles): 
+                        print(f"Nến số {i} và nến số {i-1} tạo thành mẫu hình MÂY ĐEN BAO PHỦ sau xu hướng tăng. Khả năng đảo chiều giảm!") 
+
+            #Mô phỏng lại biểu đồ của các cây nến 
+            draw_candlestick_chart(Candlestick_Map, symbol=Symbol) 
         else: 
             print("Không có dữ liệu cho khoảng thời gian này.") 
     
