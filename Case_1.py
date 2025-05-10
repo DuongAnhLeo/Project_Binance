@@ -35,7 +35,8 @@ def PiercingLine(candle1, candle2):
 
     # Điều kiện Xuyên Thấu (Piercing Line)
     return (candle2.get_open_price() < candle1.get_close_price() and
-            candle2.get_close_price() > midpoint_candle1)
+            candle2.get_close_price() > midpoint_candle1 and 
+            candle2.get_close_price() < candle1.get_open_price())
 
 """Mẫu hình nhấn chìm tăng: Là mẫu hình xuất hiện trong xu hướng giảm của thị trường,
 gồm có 2 nến. Nến thứ nhất là 1 nến giảm, nến thứ 2 là nến tăng, nuốt trọn nến thứ 1 """
@@ -51,5 +52,5 @@ def BullishEngulfing(candle1, candle2):
         return False
 
     # Thân nến 2 bao trùm toàn bộ thân nến 1
-    return (candle2.get_open_price() < candle1.get_close_price() and
-            candle2.get_close_price() > candle1.get_open_price())
+    return (candle2.get_open_price() <= candle1.get_close_price() and
+            candle2.get_close_price() >= candle1.get_open_price())
