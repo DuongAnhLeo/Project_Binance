@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import datetime
 from Draw import draw_candlestick_chart
-from Case_1 import Hammer, PiercingLine
+from Case_1 import Hammer, PiercingLine, BullishEngulfing
 from Case_2 import HangingMan, DarkCloudCover
 from Trend import DownTrend, UpTrend
 
@@ -87,6 +87,10 @@ if response.status_code == 200:
                     #Mẫu hình xuyên thấu 
                     if PiercingLine(prev_candles, curr_candles):
                         print(f"Nến số {i-1} và nến số {i} tạo thành mẫu hình XUYÊN THẤU sau xu hướng giảm. Khả năng đảo chiều tăng!")
+
+                    #Mẫu hình nhấn chìm tăng
+                    if BullishEngulfing(prev_candles, curr_candles):
+                        print(f"Nến số {i-1} và nến số {i} tạo thành mẫu hình NHẤN CHÌM TĂNG sau xu hướng giảm. Khả năng đảo chiều tăng!")
 
                 if UpTrend(Candlestick_Map, i - 1):
                     #Nến người treo cổ
