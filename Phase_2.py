@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 from Draw import draw_candlestick_chart
 from Case_1 import Hammer, PiercingLine, BullishEngulfing
-from Case_2 import HangingMan, DarkCloudCover
+from Case_2 import HangingMan, DarkCloudCover, BearishEngulfing
 from Trend import DownTrend, UpTrend
 
 #Request đến URL này (của Cafef) để có thể lấy API của các mã cổ phiếu
@@ -101,6 +101,10 @@ if response.status_code == 200:
                     #Mẫu hình mây đen bao phủ
                     if DarkCloudCover(prev_candles, curr_candles): 
                         print(f"Nến số {i} và nến số {i-1} tạo thành mẫu hình MÂY ĐEN BAO PHỦ sau xu hướng tăng. Khả năng đảo chiều giảm!") 
+                    
+                    #Mẫu hình Nhấn chìm giảm
+                    if BearishEngulfing(prev_candles, curr_candles):
+                        print(f"Nến số {i-1} và nến số {i} tạo thành mẫu hình NHẤN CHÌM GIẢM sau xu hướng tăng. Khả năng đảo chiều giảm!")
 
             #Mô phỏng lại biểu đồ của các cây nến 
             draw_candlestick_chart(Candlestick_Map, symbol=Symbol) 
