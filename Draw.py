@@ -42,10 +42,13 @@ def draw_candlestick_chart(candlestick_map, symbol="Mã cổ phiếu"):
     offset = (close_prices.max() - close_prices.min()) * 0.3  # Khoảng cách ~1cm
     shifted_close = close_prices - offset
 
-    add_plot = [make_addplot(shifted_close, color='blue', width=1.2, label='Giá đóng cửa (dời xuống)')]
+    shifted_parallel = close_prices + offset  # Đường song song với đường
+
+    add_plot = [make_addplot(shifted_close, color='blue', width=1.2, label='Dữ liệu thật'),
+                make_addplot(shifted_parallel, color='red', width=1.2, linestyle='dotted', label='Đường dự đoán')]
 
     mpf.plot(df, type='candle', style='charles',
-             title=f"Biểu đồ nến mô phỏng {symbol}",
+             title=f"Biểu đồ {symbol}",
              volume=False,
              addplot=add_plot,
              ylabel='Giá',
