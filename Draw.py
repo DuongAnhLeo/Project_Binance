@@ -37,16 +37,18 @@ def draw_candlestick_chart(candlestick_map, symbol="Mã cổ phiếu"):
     df = pd.DataFrame(candles)
     df.set_index("Date", inplace=True)
 
-    # Vẽ biểu đồ nến
 # Vẽ biểu đồ nến + đường dữ liệu
+    close_prices = df["Close"]
+    offset = (close_prices.max() - close_prices.min()) * 0.3  # Khoảng cách ~1cm
+    shifted_close = close_prices - offset
 
-    add_plot = make_addplot(df["Close"], color='blue', width=1, linestyle='-')
+    add_plot = [make_addplot(shifted_close, color='blue', width=1.2, label='Giá đóng cửa (dời xuống)')]
 
-    mpf.plot(
-        df,
-        type='candle',
-        style='charles',
-        title=f"Biểu đồ nến mô phỏng {symbol}",
-        volume=False,
-        addplot=add_plot
-    )
+    mpf.plot(df, type='candle', style='charles',
+             title=f"Biểu đồ nến mô phỏng {symbol}",
+             volume=False,
+             addplot=add_plot,
+             ylabel='Giá',
+             ylabel_lower=''
+            )
+
