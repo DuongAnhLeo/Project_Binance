@@ -1,6 +1,7 @@
 import pandas as pd
 import mplfinance as mpf
 from datetime import datetime
+from mplfinance import make_addplot
 
 def draw_candlestick_chart(candlestick_map, symbol="Mã cổ phiếu"):
     """
@@ -9,7 +10,7 @@ def draw_candlestick_chart(candlestick_map, symbol="Mã cổ phiếu"):
     """
     candles = []
     for i, candle in candlestick_map.items():
-        if not hasattr(candle, 'date'):
+        if not hasattr(candle, 'date'): 
             continue  # Bỏ qua nếu không có ngày
 
         date = candle.date
@@ -37,4 +38,15 @@ def draw_candlestick_chart(candlestick_map, symbol="Mã cổ phiếu"):
     df.set_index("Date", inplace=True)
 
     # Vẽ biểu đồ nến
-    mpf.plot(df, type='candle', style='charles', title=f"Biểu đồ nến của {symbol}", volume=False)
+# Vẽ biểu đồ nến + đường dữ liệu
+
+    add_plot = make_addplot(df["Close"], color='blue', width=1, linestyle='-')
+
+    mpf.plot(
+        df,
+        type='candle',
+        style='charles',
+        title=f"Biểu đồ nến mô phỏng {symbol}",
+        volume=False,
+        addplot=add_plot
+    )
