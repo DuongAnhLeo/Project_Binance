@@ -1,9 +1,11 @@
 import pandas as pd
 import mplfinance as mpf
-from datetime import datetime
 from mplfinance import make_addplot
+import matplotlib.pyplot as plt
+import numpy as np
+from datetime import datetime
 
-def draw_candlestick_chart(candlestick_map, pattern_index = None, symbol = "Mã cổ phiếu"):
+def draw_candlestick_chart(candlestick_map, pattern_index = None,symbol = "Mã cổ phiếu"):
     """
     Nhận dữ liệu từ dict cây nến và vẽ biểu đồ nến.
     Mỗi cây nến trong dict phải có dạng: key = int, value = Candlestick instance.
@@ -37,23 +39,37 @@ def draw_candlestick_chart(candlestick_map, pattern_index = None, symbol = "Mã 
     df = pd.DataFrame(candles)
     df.set_index("Date", inplace=True)
 
-# Vẽ biểu đồ nến + đường dữ liệu
+    # Vẽ biểu đồ nến + đường dữ liệu
     close_prices = df["Close"]
-    offset = (close_prices.max() - close_prices.min()) * 0.3  # Khoảng cách ~1cm
+    # Khoảng cách ~1cm
+    offset = (close_prices.max() - close_prices.min()) * 0.3
     shifted_close = close_prices - offset
 
-    shifted_parallel = close_prices + offset  # Đường song song với đường
+    # Đường song song với đường dữ liệu
+    shifted_parallel = close_prices + offset 
     if pattern_index is not None and pattern_index > 0:
-        shifted_parallel.iloc[pattern_index:] = None  # Chỉ giữ phần trước mẫu hình 
+        # Chỉ giữ phần trước mẫu hình 
+        shifted_parallel.iloc[pattern_index:] = None  
 
     add_plot = [make_addplot(shifted_close, color='blue', width=1.2, label='Dữ liệu thật'),
-                make_addplot(shifted_parallel, color='yellow', width=1.2, linestyle='dotted', label='Đường dự đoán')]
+                make_addplot(shifted_parallel, color='blue', width=1.2, linestyle='dotted', label='Đường dự đoán')]
 
-    mpf.plot(df, type='candle', style='charles', 
-             title=f"Biểu đồ {symbol}", 
-             volume=False, 
-             addplot=add_plot, 
-             ylabel='Giá', 
-             ylabel_lower='' 
+
+    if pattern_index is not None and pattern_index > 0 and pattern_index <= len(df):
+        marker_data = np.full(len(df), np.nan)
+        idx = pattern_index - 1
+        # Giá trung bình giữa High và Low tại cây nến điểm dừng
+        middle_price = (df['High'].iloc[idx] + df['Low'].iloc[idx]) / 2
+        marker_data[idx] = middle_price
+        add_plot.append(
+            make_addplot(marker_data, type='scatter', markersize=100, marker='o', color='yellow', panel=0)
+        )
+    mpf.plot(df, type='candle', style='charles',
+             title=f"Biểu đồ {symbol}",
+             volume=False,
+             addplot=add_plot,
+             ylabel='Giá',
+             ylabel_lower=''
             ) 
 
+    
