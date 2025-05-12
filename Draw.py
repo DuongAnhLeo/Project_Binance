@@ -59,7 +59,7 @@ def draw_candlestick_chart(candlestick_map, pattern_index = None,symbol = "Mã c
         marker_data = np.full(len(df), np.nan)
         idx = pattern_index - 1
         # Giá trung bình giữa High và Low tại cây nến điểm dừng
-        middle_price = (df['High'].iloc[idx] + df['Low'].iloc[idx]) / 2
+        middle_price = (df['Open'].iloc[idx] + df['Close'].iloc[idx]) / 2
         marker_data[idx] = middle_price
         add_plot.append(
             make_addplot(marker_data, type='scatter', markersize=100, marker='o', color='yellow', panel=0)
