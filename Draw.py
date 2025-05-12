@@ -62,7 +62,7 @@ def draw_candlestick_chart(candlestick_map, pattern_index = None,symbol = "Mã c
         middle_price = (df['Open'].iloc[idx] + df['Close'].iloc[idx]) / 2
         marker_data[idx] = middle_price
         add_plot.append(
-            make_addplot(marker_data, type='scatter', markersize=100, marker='o', color='yellow', panel=0)
+            make_addplot(marker_data, type='scatter', markersize=100, marker='o', color='yellow', label='Điểm đảo chiều',panel=0)
         )
     mpf.plot(df, type='candle', style='charles',
              title=f"Biểu đồ {symbol}",
