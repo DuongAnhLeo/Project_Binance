@@ -34,7 +34,7 @@ def PiercingLine(candle1, candle2):
     midpoint_candle1 = (candle1.get_open_price() + candle1.get_close_price()) / 2
 
     # Điều kiện Xuyên Thấu (Piercing Line)
-    return (candle2.get_open_price() < candle1.get_close_price() and
+    return (candle2.get_open_price() <= candle1.get_close_price() and
             candle2.get_close_price() > midpoint_candle1 and 
             candle2.get_close_price() < candle1.get_open_price())
 
