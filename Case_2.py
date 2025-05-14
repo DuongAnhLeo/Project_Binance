@@ -14,7 +14,7 @@ def HangingMan(candle):
     low_shadow = min(openPrice, closePrice) - lowPrice 
     up_shadow = highPrice - max(openPrice, closePrice)
     
-    return low_shadow >= 1.5 * body and up_shadow <= body*0.8
+    return low_shadow >= 1.5 * body and up_shadow <= body*0.6
     #bóng dưới dài gấp 2 lần thân nến, bóng trên thấp
 
 
@@ -37,7 +37,7 @@ def DarkCloudCover(candle1, candle2):
     midpoint_candle1 = (candle1.get_open_price() + candle1.get_close_price()) / 2
     
     # Điều kiện Mây Đen Bao Phủ
-    return (candle2.get_open_price() > candle1.get_close_price() and
+    return (candle2.get_open_price() >= candle1.get_close_price() and
             candle2.get_close_price() < midpoint_candle1 and 
             candle2.get_close_price() > candle1.get_open_price())
 
