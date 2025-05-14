@@ -14,7 +14,7 @@ def HangingMan(candle):
     low_shadow = min(openPrice, closePrice) - lowPrice 
     up_shadow = highPrice - max(openPrice, closePrice)
     
-    return low_shadow >= 1.5 * body and up_shadow <= body*0.5 
+    return low_shadow >= 1.5 * body and up_shadow <= body*0.6
     #bóng dưới dài gấp 2 lần thân nến, bóng trên thấp
 
 
